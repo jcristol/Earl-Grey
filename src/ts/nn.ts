@@ -1,3 +1,27 @@
+import * as math from "mathjs";
+
+export class NeuralNetwork {
+  hidden_layers: number;
+  hidden_nodes: number;
+  inputs_nodes: number;
+  output_nodes: number;
+  weights: Array<any>;
+  biases: Array<any>;
+
+  constructor(
+    input_nodes: number,
+    output_nodes: number,
+    hidden_nodes: Object
+  ) {
+    // this.inputs_nodes = input_nodes;
+    // this.output_nodes = output_nodes;
+    // this.hidden_layers = hidden_nodes['layers'];
+    // this.hidden_nodes = hidden_nodes['nodes'];
+    // fill the weights and biases with the mid layer weights
+    // this.weights = Array(this.hidden_layers - 1).fill(null).map(val => math.zeros(this.hidden_nodes, this.hidden_nodes));
+    // this.biases = Array(this.hidden_layers - 1).fill(null).map(val => math.zeros(this.hidden_nodes, this.hidden_nodes));
+  }
+}
 // import { Matrix, Vector } from "./matrix";
 
 // export class NeuralNetwork {
@@ -56,7 +80,6 @@
 //       ).multiply(0.001),
 //       hiddens.transpose()
 //     );
-
 
 //     // hopefully this is right
 //     this.weights[1] = Matrix.add(this.weights[1], weight_deltas_ho);

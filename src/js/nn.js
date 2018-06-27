@@ -1,3 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class NeuralNetwork {
+    constructor(input_nodes, output_nodes, hidden_nodes) {
+        // this.inputs_nodes = input_nodes;
+        // this.output_nodes = output_nodes;
+        // this.hidden_layers = hidden_nodes['layers'];
+        // this.hidden_nodes = hidden_nodes['nodes'];
+        // fill the weights and biases with the mid layer weights
+        // this.weights = Array(this.hidden_layers - 1).fill(null).map(val => math.zeros(this.hidden_nodes, this.hidden_nodes));
+        // this.biases = Array(this.hidden_layers - 1).fill(null).map(val => math.zeros(this.hidden_nodes, this.hidden_nodes));
+    }
+}
+exports.NeuralNetwork = NeuralNetwork;
 // import { Matrix, Vector } from "./matrix";
 // export class NeuralNetwork {
 //   levels: number;
