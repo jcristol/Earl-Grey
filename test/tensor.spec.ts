@@ -2,7 +2,15 @@ import { Tensor } from "../src/ts/tensor";
 import { expect } from "chai";
 import "mocha";
 
-const std_dimensions: Array<number> = [2];
+const std_dimensions: Array<number> = [2,3];
+
+function make_tensor_array(func: Function, d: Array<number>): Array<any> {
+  if(d.length > 0){
+    return Array(d[0]).fill(null).map(() => make_tensor_array(func, d.slice(1)));
+  } else{
+    return func();
+  }
+}
 
 function validate_dimensions(t: Tensor, d: Array<number>): boolean {
   if(t.data instanceof Array) {
@@ -34,15 +42,16 @@ describe("test tensor utility functions", () => {
     expect(validate_copy(a,b)).to.be.true;
   });
 
-  it("validate copy is different for different tensors", () => {
+  it("validate copy is distinct from src", () => {
     const a: Tensor = Tensor.zeros(...std_dimensions);
     const b: Tensor = Tensor.zeros(...std_dimensions).map(() => 1);
     expect(validate_copy(a,b)).to.be.false;
   });
 
-  it("validate copy is distinct from src", () => {
-    // const a: Tensor = Tensor.zeros(...std_dimensions);
-    // expect(validate_dimensions(a, std_dimensions)).to.be.true;
+  it("validate map and toArray", () => {
+    const foo: Function = () => 1;
+    const a: Tensor = Tensor.zeros(...std_dimensions).map(foo);
+    expect(a.toArray()).to.be.deep.equal(make_tensor_array(foo, a.dimensions));
   });
 
 });
