@@ -2,6 +2,7 @@ export class Tensor {
   data: Array<Tensor> | number;
   dimensions: Array<number>;
 
+  // do not directly call please
   constructor(...dimensions: Array<number>) {
     this.dimensions = dimensions;
     this.data = Array(0);
@@ -22,9 +23,13 @@ export class Tensor {
     if (t.dimensions.length) {
       const dimension: number = t.dimensions[0];
       Array(dimension)
-      .fill(null)
-      .forEach(() => (<Array<Tensor>>t.data).push(new Tensor(...t.dimensions.slice(1))));
-    } else {t.data = 0;}
+        .fill(null)
+        .forEach(() =>
+          (<Array<Tensor>>t.data).push(new Tensor(...t.dimensions.slice(1)))
+        );
+    } else {
+      t.data = 0;
+    }
     return t;
   }
 
@@ -35,7 +40,6 @@ export class Tensor {
       return this.data;
     }
   }
-
 }
 
 // export class Matrix {
