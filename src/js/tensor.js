@@ -37,6 +37,19 @@ class Tensor {
             return this.data;
         }
     }
+    map(func) {
+        const c = Tensor.copy(this);
+        const mutate = (func, t) => {
+            if (t.data instanceof Array) {
+                t.data.forEach(tensor => mutate(func, tensor));
+            }
+            else {
+                t.data = func(c);
+            }
+        };
+        mutate(func, c);
+        return c;
+    }
 }
 exports.Tensor = Tensor;
 // export class Matrix {

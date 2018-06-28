@@ -40,6 +40,19 @@ export class Tensor {
       return this.data;
     }
   }
+
+  map(func: Function): Tensor {
+    const c = Tensor.copy(this);
+    const mutate: Function = (func: Function, t: Tensor) => {
+      if (t.data instanceof Array) {
+        t.data.forEach(tensor => mutate(func, tensor));
+      } else {
+        t.data = func(c);
+      }
+    };
+    mutate(func, c);
+    return c;
+  }
 }
 
 // export class Matrix {
