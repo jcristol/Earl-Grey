@@ -1,11 +1,7 @@
 import { Tensor } from "./tensor";
 
-const l = new Tensor(2, 2);
-const arr1 = l.toArray();
-arr1[0][0] = 2;
-console.log(arr1)
-console.log(l.toArray());
-
+const t = Tensor.zeros(2);
+const v = Tensor.copy(t);
 
 // export class NeuralNetwork {
 // }

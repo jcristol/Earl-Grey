@@ -25,7 +25,7 @@ export class Tensor {
       Array(dimension)
         .fill(null)
         .forEach(() =>
-          (<Array<Tensor>>t.data).push(new Tensor(...t.dimensions.slice(1)))
+          (<Array<Tensor>>t.data).push(Tensor.zeros(...t.dimensions.slice(1)))
         );
     } else {
       t.data = 0;

@@ -1,11 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tensor_1 = require("./tensor");
-const l = new tensor_1.Tensor(2, 2);
-const arr1 = l.toArray();
-arr1[0][0] = 2;
-console.log(arr1);
-console.log(l.toArray());
+const t = tensor_1.Tensor.zeros(2);
+const v = tensor_1.Tensor.copy(t);
 // export class NeuralNetwork {
 // }
 // import { Matrix, Vector } from "./matrix";

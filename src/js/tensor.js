@@ -1,18 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Tensor {
+    // do not directly call please
     constructor(...dimensions) {
         this.dimensions = dimensions;
         this.data = Array(0);
-        if (dimensions.length) {
-            const dimension = this.dimensions[0];
-            Array(dimension)
-                .fill(null)
-                .forEach(() => this.data.push(new Tensor(...this.dimensions.slice(1))));
+    }
+    static copy(t) {
+        const result = new Tensor(...t.dimensions);
+        if (t.data instanceof Array) {
+            result.data = t.data.map(tensor => Tensor.copy(tensor));
         }
         else {
-            this.data = 0;
+            result.data = t.data;
         }
+        return result;
+    }
+    static zeros(...dimensions) {
+        const t = new Tensor(...dimensions);
+        if (t.dimensions.length) {
+            const dimension = t.dimensions[0];
+            Array(dimension)
+                .fill(null)
+                .forEach(() => t.data.push(Tensor.zeros(...t.dimensions.slice(1))));
+        }
+        else {
+            t.data = 0;
+        }
+        return t;
     }
     toArray() {
         if (this.data instanceof Array) {
@@ -21,17 +36,6 @@ class Tensor {
         else {
             return this.data;
         }
-    }
-    static copy(t) {
-        // const result = new Tensor(...t.dimensions);
-        if () {
-            const data_copy = t.data.map(tensor => Tensor.copy(tensor));
-            // return (<Array<Tensor>>t.data).map(tensor => tensor);
-        }
-        else {
-            // return this.data
-        }
-        return result;
     }
 }
 exports.Tensor = Tensor;
