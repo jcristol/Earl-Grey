@@ -48,29 +48,29 @@ export class Matrix {
     return c;
   }
 
-  multiply(b: Matrix | number): Matrix {
+  multiply(b: Matrix | Constant): Matrix {
     if (b instanceof Matrix) {
       const t: Matrix = Matrix.copy(this);
       const c: Matrix = Matrix.zeros(this.n, b.m);
       return c.map((_, i, j) => dot(t.getRowArray(i), b.getColArray(j)));
     } else {
-      return this.map(val => val * b);
+      return this.map(val => val * b.data);
     }
   }
 
-  add(b: Matrix | number): Matrix {
+  add(b: Matrix | Constant): Matrix {
     if (b instanceof Matrix) {
       return this.map((val, i, j) => val + b.data[i][j]);
     } else {
-      return this.map(val => val + b);
+      return this.map(val => val + b.data);
     }
   }
 
-  subtract(b: Matrix | number): Matrix {
+  subtract(b: Matrix | Constant): Matrix {
     if (b instanceof Matrix) {
-      return b.multiply(-1).add(this);
+      return this.add(b.multiply(new Constant(-1)));
     } else {
-      return this.add(-b);
+      return this.map(val => val - b.data);
     }
   }
 
@@ -78,7 +78,7 @@ export class Matrix {
     const t: Matrix = Matrix.copy(this);
     const c: Matrix = Matrix.zeros(this.n, this.m + b.m);
     return c.map((_, i, j) => {
-      if(j >= t.m) return b.data[i][j - t.m];
+      if (j >= t.m) return b.data[i][j - t.m];
       else return t.data[i][j];
     });
   }
@@ -87,7 +87,7 @@ export class Matrix {
     const t: Matrix = Matrix.copy(this);
     const c: Matrix = Matrix.zeros(this.n + b.n, this.m);
     return c.map((_, i, j) => {
-      if(i >= t.n) return b.data[i - t.n][j];
+      if (i >= t.n) return b.data[i - t.n][j];
       else return t.data[i][j];
     });
   }
@@ -96,11 +96,42 @@ export class Matrix {
     const t: Matrix = Matrix.copy(this);
     const c: Matrix = Matrix.zeros(this.m, this.n);
     return c.map((_, i, j) => t.data[j][i]);
-
   }
 
   print() {
     console.table(this.data);
+  }
+}
+
+export class Constant {
+  data: number;
+
+  constructor(a: number) {
+    this.data = a;
+  }
+
+  multiply(b: Matrix | Constant): Matrix | Constant {
+    if (b instanceof Matrix) {
+      return b.multiply(this);
+    } else {
+      return new Constant(this.data * b.data);
+    }
+  }
+
+  add(b: Matrix | Constant): Matrix | Constant {
+    if (b instanceof Matrix) {
+      return b.add(this);
+    } else {
+      return new Constant(this.data + b.data);
+    }
+  }
+
+  subtract(b: Matrix | Constant): Matrix | Constant {
+    if (b instanceof Matrix) {
+      return b.subtract(this);
+    } else {
+      return new Constant(this.data + b.data);
+    }
   }
 }
 

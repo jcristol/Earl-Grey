@@ -1,4 +1,4 @@
-import { Matrix } from "../src/ts/matrix";
+import { Matrix, Constant } from "../src/ts/matrix";
 import { expect } from "chai";
 import "mocha";
 import * as math from "mathjs";
@@ -37,8 +37,8 @@ describe("Test Matrix arithmetic", () => {
   it("test mult const", () => {
     const [r1, r2, n, m] = generateParams(rseed);
     const a: Matrix = Matrix.random(n, m, r1, r2);
-    const x: number = r1 + r2;
-    expect(a.multiply(x)).to.deep.equal(validator(math.multiply, a, x));
+    const x: Constant = new Constant(r1 + r2);
+    expect(a.multiply(x)).to.deep.equal(validator(math.multiply, a, x.data));
   });
 
   it("test add matrix", () => {
@@ -51,8 +51,8 @@ describe("Test Matrix arithmetic", () => {
   it("test add const", () => {
     const [r1, r2, n, m] = generateParams(rseed);
     const a: Matrix = Matrix.random(n, m, r1, r2);
-    const x: number = r1 + r2;
-    expect(a.add(x)).to.deep.equal(validator(math.add, a, x));
+    const x: Constant = new Constant(r1 + r2);
+    expect(a.add(x)).to.deep.equal(validator(math.add, a, x.data));
   });
 
   it("test subtract matrix", () => {
@@ -65,8 +65,8 @@ describe("Test Matrix arithmetic", () => {
   it("test subtract const", () => {
     const [r1, r2, n, m] = generateParams(rseed);
     const a: Matrix = Matrix.random(n, m, r1, r2);
-    const x: number = r1 + r2;
-    expect(a.subtract(x)).to.deep.equal(validator(math.subtract, a, x));
+    const x: Constant = new Constant(r1 + r2);
+    expect(a.subtract(x)).to.deep.equal(validator(math.subtract, a, x.data));
   });
 
   it("test concat", () => {
