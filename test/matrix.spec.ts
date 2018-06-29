@@ -6,7 +6,7 @@ import * as math from "mathjs";
 const rseed: number = 10;
 
 function validator(func: Function, ...rest): Matrix | Constant {
-  if(rest.some(val => val instanceof Matrix)) {
+  if (rest.some(val => val instanceof Matrix)) {
     const args: Array<any> = rest.map(val => {
       if (val instanceof Matrix) return math.matrix(val.toArray());
       else return val.data;
