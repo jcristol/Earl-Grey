@@ -44,7 +44,7 @@ class Matrix {
             return c.map((_, i, j) => dot(t.getRowArray(i), b.getColArray(j)));
         }
         else {
-            return this.map(val => val * b);
+            return this.map(val => val * b.data);
         }
     }
     add(b) {
@@ -52,15 +52,15 @@ class Matrix {
             return this.map((val, i, j) => val + b.data[i][j]);
         }
         else {
-            return this.map(val => val + b);
+            return this.map(val => val + b.data);
         }
     }
     subtract(b) {
         if (b instanceof Matrix) {
-            return b.multiply(-1).add(this);
+            return this.add(b.multiply(new Constant(-1)));
         }
         else {
-            return this.add(-b);
+            return this.map(val => val - b.data);
         }
     }
     concat(b) {
@@ -93,6 +93,36 @@ class Matrix {
     }
 }
 exports.Matrix = Matrix;
+class Constant {
+    constructor(a) {
+        this.data = a;
+    }
+    multiply(b) {
+        if (b instanceof Matrix) {
+            return b.multiply(this);
+        }
+        else {
+            return new Constant(this.data * b.data);
+        }
+    }
+    add(b) {
+        if (b instanceof Matrix) {
+            return b.add(this);
+        }
+        else {
+            return new Constant(this.data + b.data);
+        }
+    }
+    subtract(b) {
+        if (b instanceof Matrix) {
+            return b.subtract(this).multiply(new Constant(-1));
+        }
+        else {
+            return new Constant(this.data - b.data);
+        }
+    }
+}
+exports.Constant = Constant;
 function dot(x, y) {
     return x.map((_, i) => x[i] * y[i]).reduce((a, b) => a + b);
 }
