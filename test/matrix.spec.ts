@@ -15,12 +15,15 @@ function validator(func: Function, ...rest) {
 
 function generateParams(seed: number) {
   return [
-    Math.floor(Math.random() * seed) + 1,
-    Math.floor(Math.random() * seed * -1) - 1,
-    Math.floor(Math.random() * seed) + 1,
-    Math.floor(Math.random() * seed) + 1,
-    Math.floor(Math.random() * seed) + 1
-  ];
+    Math.floor(Math.random() * seed),
+    Math.floor(Math.random() * seed * -1),
+    Math.floor(Math.random() * seed),
+    Math.floor(Math.random() * seed),
+    Math.floor(Math.random() * seed)
+  ].map(val => {
+    if(val === 0) return val + 1;
+    else return val;
+  });
 }
 
 describe("Test Matrix arithmetic", () => {
