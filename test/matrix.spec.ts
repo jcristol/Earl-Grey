@@ -5,7 +5,7 @@ import * as math from "mathjs";
 
 const rseed: number = 10;
 
-function validator(func: Function, ...rest) {
+function validator(func: Function, ...rest): Matrix {
   const args: Array<any> = rest.map(val => {
     if (val instanceof Matrix) return math.matrix(val.toArray());
     else return val;
@@ -13,7 +13,7 @@ function validator(func: Function, ...rest) {
   return Matrix.fromArray(func(...args)._data);
 }
 
-function generateParams(seed: number) {
+function generateParams(seed: number): Array<number> {
   return [
     Math.floor(Math.random() * seed),
     Math.floor(Math.random() * seed * -1),
