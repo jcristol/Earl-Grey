@@ -1,8 +1,3 @@
-import { Tensor } from "./tensor";
-
-const t = Tensor.zeros(2);
-const v = Tensor.copy(t);
-
 // export class NeuralNetwork {
 // }
 
