@@ -1,8 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tensor_1 = require("./tensor");
-const t = tensor_1.Tensor.zeros(2);
-const v = tensor_1.Tensor.copy(t);
 // export class NeuralNetwork {
 // }
 // import { Matrix, Vector } from "./matrix";
