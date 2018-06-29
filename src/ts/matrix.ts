@@ -128,9 +128,9 @@ export class Constant {
 
   subtract(b: Matrix | Constant): Matrix | Constant {
     if (b instanceof Matrix) {
-      return b.subtract(this);
+      return b.subtract(this).multiply(new Constant(-1));
     } else {
-      return new Constant(this.data + b.data);
+      return new Constant(this.data - b.data);
     }
   }
 }

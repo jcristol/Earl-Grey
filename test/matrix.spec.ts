@@ -5,12 +5,17 @@ import * as math from "mathjs";
 
 const rseed: number = 10;
 
-function validator(func: Function, ...rest): Matrix {
-  const args: Array<any> = rest.map(val => {
-    if (val instanceof Matrix) return math.matrix(val.toArray());
-    else return val;
-  });
-  return Matrix.fromArray(func(...args)._data);
+function validator(func: Function, ...rest): Matrix | Constant {
+  if(rest.some(val => val instanceof Matrix)) {
+    const args: Array<any> = rest.map(val => {
+      if (val instanceof Matrix) return math.matrix(val.toArray());
+      else return val.data;
+    });
+    return Matrix.fromArray(func(...args)._data);
+  } else {
+    const args: Array<number> = rest.map((val: Constant) => val.data);
+    return new Constant(func(...args));
+  }
 }
 
 function generateParams(seed: number): Array<number> {
@@ -21,7 +26,7 @@ function generateParams(seed: number): Array<number> {
     Math.floor(Math.random() * seed),
     Math.floor(Math.random() * seed)
   ].map(val => {
-    if(val === 0) return val + 1;
+    if (val === 0) return val + 1;
     else return val;
   });
 }
@@ -38,7 +43,7 @@ describe("Test Matrix arithmetic", () => {
     const [r1, r2, n, m] = generateParams(rseed);
     const a: Matrix = Matrix.random(n, m, r1, r2);
     const x: Constant = new Constant(r1 + r2);
-    expect(a.multiply(x)).to.deep.equal(validator(math.multiply, a, x.data));
+    expect(a.multiply(x)).to.deep.equal(validator(math.multiply, a, x));
   });
 
   it("test add matrix", () => {
@@ -52,7 +57,7 @@ describe("Test Matrix arithmetic", () => {
     const [r1, r2, n, m] = generateParams(rseed);
     const a: Matrix = Matrix.random(n, m, r1, r2);
     const x: Constant = new Constant(r1 + r2);
-    expect(a.add(x)).to.deep.equal(validator(math.add, a, x.data));
+    expect(a.add(x)).to.deep.equal(validator(math.add, a, x));
   });
 
   it("test subtract matrix", () => {
@@ -66,7 +71,7 @@ describe("Test Matrix arithmetic", () => {
     const [r1, r2, n, m] = generateParams(rseed);
     const a: Matrix = Matrix.random(n, m, r1, r2);
     const x: Constant = new Constant(r1 + r2);
-    expect(a.subtract(x)).to.deep.equal(validator(math.subtract, a, x.data));
+    expect(a.subtract(x)).to.deep.equal(validator(math.subtract, a, x));
   });
 
   it("test concat", () => {
@@ -112,5 +117,49 @@ describe("Test Matrix arithmetic", () => {
     const [r1, r2, n, m] = generateParams(rseed);
     const a: Matrix = Matrix.random(n, m, r1, r2);
     expect(a.transpose()).to.deep.equal(validator(math.transpose, a));
+  });
+});
+
+describe("Test Constant arithmetic", () => {
+  it("test add matrix", () => {
+    const [r1, r2, n, m, z] = generateParams(rseed);
+    const a: Constant = new Constant(z);
+    const x: Matrix = Matrix.random(n, m, r1, r2);
+    expect(a.add(x)).to.deep.equal(validator(math.add, a, x));
+  });
+
+  it("test add const", () => {
+    const [r1, r2, n, m, z] = generateParams(rseed);
+    const a: Constant = new Constant(z);
+    const x: Constant = new Constant(r1 + r2);
+    expect(a.add(x)).to.deep.equal(validator(math.add, a, x));
+  });
+
+  it("test mult matrix", () => {
+    const [r1, r2, n, m, z] = generateParams(rseed);
+    const a: Constant = new Constant(z);
+    const x: Matrix = Matrix.random(n, m, r1, r2);
+    expect(a.multiply(x)).to.deep.equal(validator(math.multiply, a, x));
+  });
+
+  it("test mult const", () => {
+    const [r1, r2, n, m, z] = generateParams(rseed);
+    const a: Constant = new Constant(z);
+    const x: Constant = new Constant(r1 + r2);
+    expect(a.multiply(x)).to.deep.equal(validator(math.multiply, a, x));
+  });
+
+  it("test subtract matrix", () => {
+    const [r1, r2, n, m, z] = generateParams(rseed);
+    const a: Constant = new Constant(z);
+    const x: Matrix = Matrix.random(n, m, r1, r2);
+    expect(a.subtract(x)).to.deep.equal(validator(math.subtract, a, x));
+  });
+
+  it("test subtract const", () => {
+    const [r1, r2, n, m, z] = generateParams(rseed);
+    const a: Constant = new Constant(z);
+    const x: Constant = new Constant(r1 + r2);
+    expect(a.subtract(x)).to.deep.equal(validator(math.subtract, a, x));
   });
 });
