@@ -1,3 +1,29 @@
+import {Matrix, Constant} from "./matrix";
+
+export class NeuralNetwork {
+  layers: Array<Object>;
+
+  constructor(structure: Object) {
+    const hidden_layers: number = structure['hidden_layers'];
+    const input_nodes: number = structure['input_nodes'];
+    const hidden_nodes: number = structure['hidden_nodes'];
+    const output_nodes: number = structure['output_nodes'];
+    this.layers = Array(hidden_layers + 1).fill(new Object());
+    this.layers = this.layers.map((layer, i, arr) => {
+      if(i == 0) {
+        layer['weights'] = Matrix.random(hidden_nodes, input_nodes, -1, 1);
+        layer['biases'] = Matrix.random(hidden_nodes, 1, -1, 1);
+      } else if (i == hidden_layers) {
+        layer['weights'] = Matrix.random(output_nodes, hidden_nodes, -1, 1);
+        layer['biases'] = Matrix.random(output_nodes, 1, -1, 1);
+      } else {
+        layer['weights'] = Matrix.random(hidden_nodes, hidden_nodes, -1, 1);
+        layer['biases'] = Matrix.random(hidden_nodes, 1, -1, 1);
+      }
+      return layer;
+    });
+  }
+}
 // export class NeuralNetwork {
 // }
 

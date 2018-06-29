@@ -1,3 +1,31 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const matrix_1 = require("./matrix");
+class NeuralNetwork {
+    constructor(structure) {
+        const hidden_layers = structure['hidden_layers'];
+        const input_nodes = structure['input_nodes'];
+        const hidden_nodes = structure['hidden_nodes'];
+        const output_nodes = structure['output_nodes'];
+        this.layers = Array(hidden_layers + 1).fill(new Object());
+        this.layers = this.layers.map((layer, i, arr) => {
+            if (i == 0) {
+                layer['weights'] = matrix_1.Matrix.random(hidden_nodes, input_nodes, -1, 1);
+                layer['biases'] = matrix_1.Matrix.random(hidden_nodes, 1, -1, 1);
+            }
+            else if (i == hidden_layers) {
+                layer['weights'] = matrix_1.Matrix.random(output_nodes, hidden_nodes, -1, 1);
+                layer['biases'] = matrix_1.Matrix.random(output_nodes, 1, -1, 1);
+            }
+            else {
+                layer['weights'] = matrix_1.Matrix.random(hidden_nodes, hidden_nodes, -1, 1);
+                layer['biases'] = matrix_1.Matrix.random(hidden_nodes, 1, -1, 1);
+            }
+            return layer;
+        });
+    }
+}
+exports.NeuralNetwork = NeuralNetwork;
 // export class NeuralNetwork {
 // }
 // import { Matrix, Vector } from "./matrix";
