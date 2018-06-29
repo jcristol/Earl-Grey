@@ -111,32 +111,3 @@ describe("Test Matrix arithmetic", () => {
     expect(a.transpose()).to.deep.equal(validator(math.transpose, a));
   });
 });
-
-// describe("Test Matrix helper functions", () => {
-//   it("Test creation of zero Matrix", () => {
-//     const a: Matrix = Matrix.zeros(4,4);
-//     expect(a).to.deep.equals(a.data.every(row => row.every(elem => elem == 0)));
-//   });
-
-//   it("Test creation of zero Vector", () => {
-//     const a = Vector.zero(2);
-//     expect(a).to.deep.equals(new Matrix([[0], [0]]));
-//   });
-
-//   it("Test toArray", () => {
-//     const a = new Vector([1, 2, 3]);
-//     expect(Vector.toArray(a)).to.deep.equals([1, 2, 3]);
-//   });
-
-//   it("Test creation of random Matrix", () => {
-//     const a: Matrix = Matrix.random(100, 100, -4, 4);
-//     expect(a.tensor.every(row => row.every(elem => elem >= -4 && elem < 4))).to
-//       .be.true;
-//   });
-
-//   it("Test creation of random Vector", () => {
-//     const a: Matrix = Vector.random(100, -4, 4);
-//     expect(a.tensor.every(row => row.every(elem => elem >= -4 && elem < 4))).to
-//       .be.true;
-//   });
-// });
