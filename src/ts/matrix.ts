@@ -10,7 +10,7 @@ export class Matrix {
 
   static vector(a: Array<number>) {
     const c: Matrix = Matrix.zeros(a.length, 1);
-    return c.map((_, i, j) => a[i])
+    return c.map((_, i, j) => a[i]);
   }
 
   static fromArray(a: Array<Array<number>>) {

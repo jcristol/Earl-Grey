@@ -5,6 +5,10 @@ class Matrix {
         this.n = n;
         this.m = m;
     }
+    static vector(a) {
+        const c = Matrix.zeros(a.length, 1);
+        return c.map((_, i, j) => a[i]);
+    }
     static fromArray(a) {
         const c = Matrix.zeros(a.length, a[0].length);
         return c.map((_, i, j) => a[i][j]);
@@ -32,6 +36,11 @@ class Matrix {
     toArray() {
         return this.data;
     }
+    flatten() {
+        const c = [];
+        this.data.forEach(row => row.forEach(col => c.push(col)));
+        return c;
+    }
     map(func) {
         const c = Matrix.copy(this);
         c.data = c.data.map((row, i) => row.map((col, j) => func(col, i, j)));
@@ -46,6 +55,10 @@ class Matrix {
         else {
             return this.map(val => val * b.data);
         }
+    }
+    hadamard(b) {
+        const t = Matrix.copy(this);
+        return t.map((_, i, j) => t.data[i][j] * b.data[i][j]);
     }
     add(b) {
         if (b instanceof Matrix) {

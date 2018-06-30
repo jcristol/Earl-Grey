@@ -2,8 +2,12 @@ import {Matrix, Constant} from "./matrix";
 
 export class NeuralNetwork {
   layers: Array<Object>;
+  hidden_layers: number;
+  alpha: number;
 
   constructor(structure: Object) {
+    this.hidden_layers = structure['hidden_layers'];
+    this.alpha = structure['alpha'];
     const hidden_layers: number = structure['hidden_layers'];
     const input_nodes: number = structure['input_nodes'];
     const hidden_nodes: number = structure['hidden_nodes'];
@@ -23,95 +27,56 @@ export class NeuralNetwork {
       return layer;
     });
   }
+
+  test(input: Array<number>): Array<Array<number>> {
+    const og: Array<number> = input;
+    const activations: Array<Array<number>> = this.layers.map(layer => {
+      const i: Matrix = Matrix.vector(input);
+      const logits: Matrix = (<Matrix>layer['weights']).multiply(i);
+      const logits_plus_bias: Matrix = (<Matrix>layer['biases']).add(logits);
+      const activation: Matrix = logits_plus_bias.map(val => sigmoid(val));
+      input = activation.flatten();
+      return input;
+    });
+    return [og, ...activations];
+  }
+
+  train(inputs: Array<Array<number>>, targets: Array<Array<number>>) {
+    inputs.forEach((input, trial) => {
+      let previous_error: Matrix = null;
+      const trial_target: Array<number> = targets[trial];
+      const out_to_in_activations: Array<Array<number>> = this.test(input).reverse();
+      const out_to_in_error: Array<Matrix> = out_to_in_activations.map((activation: Array<number>, index: number) => {
+        const weight_bias_index: number = this.hidden_layers - index - 1;
+        if(index == 0){
+          const output_error: Matrix = Matrix.vector(trial_target).subtract(Matrix.vector(activation));
+          previous_error = output_error;
+          return output_error;
+        } else {
+          const weights: Matrix = this.layers[weight_bias_index]['weights'];
+          const propagated_error: Matrix = weights.transpose().multiply(previous_error);
+          previous_error = propagated_error
+          return propagated_error;
+        }
+      });
+      const deltaWeights = out_to_in_error.slice(0, out_to_in_error.length - 1).map((l_error: Matrix, index: number) => {
+        const activation: Matrix = Matrix.vector(out_to_in_activations[index]);
+        const previous_activation: Matrix = Matrix.vector(out_to_in_activations[index + 1])
+        const deltaWeight: Matrix = l_error
+        .hadamard(derivative(activation))
+        .multiply(new Constant(this.alpha))
+        .multiply(previous_activation.transpose());
+        return deltaWeight;
+      });
+    });
+  }
 }
-// export class NeuralNetwork {
-// }
 
-// import { Matrix, Vector } from "./matrix";
+function sigmoid(x: number) {
+  return 1 / (1 + Math.exp(-x));
+}
 
-// export class NeuralNetwork {
-//   levels: number;
-//   input_nodes: number;
-//   hidden_nodes: number;
-//   output_nodes: number;
-//   weights: Array<any>;
-
-//   constructor(input_nodes: number, hidden_nodes: number, output_nodes: number) {
-//     this.input_nodes = input_nodes;
-//     this.hidden_nodes = hidden_nodes;
-//     this.output_nodes = output_nodes;
-//     this.levels = 2;
-//     this.weights = Array(this.levels).fill(null);
-//     this.weights[0] = Matrix.concat(
-//       Matrix.random(hidden_nodes, input_nodes, -1, 1),
-//       Vector.random(hidden_nodes, -1, 1)
-//     );
-//     this.weights[1] = Matrix.concat(
-//       Matrix.random(output_nodes, hidden_nodes, -1, 1),
-//       Vector.random(output_nodes, -1, 1)
-//     );
-//   }
-
-//   feedForward(input: Array<number>) {
-//     return this.weights.map((matrix: Matrix, index: number) => {
-//       const inputVector: Vector = Matrix.stack(
-//         new Vector(input),
-//         new Vector([1])
-//       );
-//       const preFunc: Vector = Matrix.multiply(matrix, inputVector);
-//       const activation: Vector = preFunc.map(
-//         (t, i, j) => sigmoid(t.tensor[i][j]),
-//         preFunc
-//       );
-//       input = Vector.toArray(activation);
-//       return input;
-//     });
-//   }
-
-//   train(inputs, targets) {
-//     const inputVector: Vector = new Vector(inputs);
-//     const results = this.feedForward(inputs);
-//     const outputs: Vector = new Vector(results[1]);
-//     const hiddens: Vector = new Vector(results[0]);
-//     const targetsMatrix: Vector = new Vector(targets);
-
-//     // Calculate the error
-//     // Error = TARGETS - OUTPUTS
-//     const output_errors: Matrix = Matrix.subtract(targetsMatrix, outputs);
-//     const weight_deltas_ho = Matrix.multiply(
-//       Matrix.multiplicationElemWise(
-//         output_errors,
-//         derivative(outputs)
-//       ).multiply(0.001),
-//       hiddens.transpose()
-//     );
-
-//     // hopefully this is right
-//     this.weights[1] = Matrix.add(this.weights[1], weight_deltas_ho);
-
-//     //Calculate the hidden errors
-//     const hidden_weights_trans: Matrix = this.weights[1].transpose();
-//     const hidden_errors: Matrix = Matrix.multiply(
-//       hidden_weights_trans,
-//       output_errors
-//     );
-//     const weight_deltas_ih = Matrix.multiply(
-//       Matrix.multiplicationElemWise(
-//         hidden_errors,
-//         derivative(hiddens)
-//       ).multiply(0.001),
-//       inputVector.transpose()
-//     );
-
-//     // hopefully this is right
-//     this.weights[0] = Matrix.add(this.weights[0], weight_deltas_ih);
-//   }
-// }
-
-// function sigmoid(x: number) {
-//   return 1 / (1 + Math.exp(-x));
-// }
-
-// function derivative(v: Vector) {
-//   return Matrix.multiplicationElemWise(v, v.multiply(-1).add(1));
-// }
+function derivative(v: Matrix) {
+  const inverse: Matrix = (<Matrix>new Constant(1).subtract(v));
+  return v.hadamard(inverse);
+}
