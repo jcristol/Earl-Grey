@@ -163,3 +163,18 @@ describe("Test Constant arithmetic", () => {
     expect(a.subtract(x)).to.deep.equal(validator(math.subtract, a, x));
   });
 });
+
+describe("Test Utility functions", () => {
+  it("test vector creation", () => {
+    const arr = [1,2,3,4];
+    const a: Matrix = Matrix.vector(arr);
+    expect(a.n).to.equal(arr.length);
+    expect(a.m).to.equal(1);
+  });
+
+  it("test flattening", () => {
+    const a: Matrix = Matrix.fromArray([[1],[2],[3]]);
+    expect(a.flatten().length).to.equal(a.n);
+    expect(1).to.equal(a.m);
+  });
+});

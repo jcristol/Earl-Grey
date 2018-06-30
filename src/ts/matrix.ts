@@ -8,6 +8,11 @@ export class Matrix {
     this.m = m;
   }
 
+  static vector(a: Array<number>) {
+    const c: Matrix = Matrix.zeros(a.length, 1);
+    return c.map((_, i, j) => a[i])
+  }
+
   static fromArray(a: Array<Array<number>>) {
     const c: Matrix = Matrix.zeros(a.length, a[0].length);
     return c.map((_, i, j) => a[i][j]);
@@ -42,6 +47,12 @@ export class Matrix {
     return this.data;
   }
 
+  flatten(): Array<number> {
+    const c = [];
+    this.data.forEach(row => row.forEach(col => c.push(col)));
+    return c;
+  }
+
   map(func: Function): Matrix {
     const c: Matrix = Matrix.copy(this);
     c.data = c.data.map((row, i) => row.map((col, j) => func(col, i, j)));
@@ -56,6 +67,11 @@ export class Matrix {
     } else {
       return this.map(val => val * b.data);
     }
+  }
+
+  hadamard(b: Matrix): Matrix {
+    const t: Matrix = Matrix.copy(this);
+    return t.map((_, i, j) => t.data[i][j] * b.data[i][j]);
   }
 
   add(b: Matrix | Constant): Matrix {
