@@ -67,7 +67,7 @@ export class NeuralNetwork {
           }
         }
       );
-      const deltaWeights = out_to_in_error
+      const deltaWeightsBiases: Array<Array<Matrix>> = out_to_in_error
         .slice(0, out_to_in_error.length - 1)
         .map((l_error: Matrix, index: number) => {
           const activation: Matrix = Matrix.vector(
@@ -80,8 +80,18 @@ export class NeuralNetwork {
             .hadamard(derivative(activation))
             .multiply(new Constant(this.alpha))
             .multiply(previous_activation.transpose());
-          return deltaWeight;
+          const deltaBias: Matrix = l_error
+            .hadamard(derivative(activation))
+            .multiply(new Constant(this.alpha));
+          return [deltaWeight, deltaBias];
         });
+      deltaWeightsBiases.forEach(([dWeight, dBias], index: number) => {
+        const weight_bias_index: number = this.hidden_layers - index - 1;
+        const weights: Matrix = this.layers[weight_bias_index]['weights'];
+        const biases: Matrix = this.layers[weight_bias_index]['biases'];
+        this.layers[weight_bias_index]['weights'] = weights.add(dWeight);
+        this.layers[weight_bias_index]['biases'] = weights.add(dBias);
+      });
     });
   }
 }
