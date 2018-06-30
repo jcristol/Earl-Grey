@@ -162,18 +162,27 @@ describe("Test Constant arithmetic", () => {
     const x: Constant = new Constant(r1 + r2);
     expect(a.subtract(x)).to.deep.equal(validator(math.subtract, a, x));
   });
+
+  it("test hadamard matrix", () => {
+    const [r1, r2, n, m, z] = generateParams(rseed);
+    const a: Matrix = Matrix.random(n, m, r1, r2);
+    const x: Matrix = Matrix.random(n, m, r1, r2);
+    expect(a.hadamard(x).toArray()).to.deep.equal(
+      a.toArray().map((row, i) => row.map((col, j) => col * x.data[i][j]))
+    );
+  });
 });
 
 describe("Test Utility functions", () => {
   it("test vector creation", () => {
-    const arr = [1,2,3,4];
+    const arr = [1, 2, 3, 4];
     const a: Matrix = Matrix.vector(arr);
     expect(a.n).to.equal(arr.length);
     expect(a.m).to.equal(1);
   });
 
   it("test flattening", () => {
-    const a: Matrix = Matrix.fromArray([[1],[2],[3]]);
+    const a: Matrix = Matrix.fromArray([[1], [2], [3]]);
     expect(a.flatten().length).to.equal(a.n);
     expect(1).to.equal(a.m);
   });
