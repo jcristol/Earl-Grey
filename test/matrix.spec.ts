@@ -118,6 +118,15 @@ describe("Test Matrix arithmetic", () => {
     const a: Matrix = Matrix.random(n, m, r1, r2);
     expect(a.transpose()).to.deep.equal(validator(math.transpose, a));
   });
+
+  it("test hadamard matrix", () => {
+    const [r1, r2, n, m, z] = generateParams(rseed);
+    const a: Matrix = Matrix.random(n, m, r1, r2);
+    const x: Matrix = Matrix.random(n, m, r1, r2);
+    expect(a.hadamard(x).toArray()).to.deep.equal(
+      a.toArray().map((row, i) => row.map((col, j) => col * x.data[i][j]))
+    );
+  });
 });
 
 describe("Test Constant arithmetic", () => {
@@ -161,15 +170,6 @@ describe("Test Constant arithmetic", () => {
     const a: Constant = new Constant(z);
     const x: Constant = new Constant(r1 + r2);
     expect(a.subtract(x)).to.deep.equal(validator(math.subtract, a, x));
-  });
-
-  it("test hadamard matrix", () => {
-    const [r1, r2, n, m, z] = generateParams(rseed);
-    const a: Matrix = Matrix.random(n, m, r1, r2);
-    const x: Matrix = Matrix.random(n, m, r1, r2);
-    expect(a.hadamard(x).toArray()).to.deep.equal(
-      a.toArray().map((row, i) => row.map((col, j) => col * x.data[i][j]))
-    );
   });
 });
 
