@@ -3,10 +3,10 @@ import { NeuralNetwork } from "./nn";
 import "p5";
 
 const structure = {
-  alpha: 0.01,
-  hidden_layers: 1,
+  alpha: 0.1,
+  hidden_layers: 4,
   input_nodes: 2,
-  hidden_nodes: 2,
+  hidden_nodes: 4,
   output_nodes: 1
 };
 
@@ -32,7 +32,7 @@ function genSample(s){
 }
 
 window.setup = function() {
-  let samples = genSample(1000);
+  let samples = genSample(10000);
   let nn = new NeuralNetwork(structure);
   samples.forEach(([input, target]) => {
     nn.train(input, target);
