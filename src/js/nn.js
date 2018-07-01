@@ -9,8 +9,9 @@ class NeuralNetwork {
         const input_nodes = structure["input_nodes"];
         const hidden_nodes = structure["hidden_nodes"];
         const output_nodes = structure["output_nodes"];
-        this.layers = Array(hidden_layers + 1).fill(new Object());
-        this.layers = this.layers.map((layer, i, arr) => {
+        this.layers = Array(hidden_layers + 1).fill(null);
+        this.layers = this.layers.map((_, i, arr) => {
+            const layer = {};
             if (i == 0) {
                 layer["weights"] = matrix_1.Matrix.random(hidden_nodes, input_nodes, -1, 1);
                 layer["biases"] = matrix_1.Matrix.random(hidden_nodes, 1, -1, 1);
