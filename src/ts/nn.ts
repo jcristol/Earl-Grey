@@ -43,7 +43,7 @@ export class NeuralNetwork {
   }
 
   // propagates error of activations backwards through the network from ouput nodes to input nodes
-  private propError(
+  private propagateError(
     activations: Array<Array<number>>,
     input: Array<number>,
     target: Array<number>
@@ -53,9 +53,9 @@ export class NeuralNetwork {
       .slice(1, activations.length)
       .reverse()
       .map((activation: Array<number>, index: number) => {
-        const wb_index: number = this.hidden_layers - index;
-        if (index == 0) {
-          // if last layer
+        const wb_index: number = this.hidden_layers - index + 1;
+        if (previous_error == null) {
+          // if output 
           const target_vector: Matrix = Matrix.vector(target);
           const activation_vector: Matrix = Matrix.vector(activation);
           const output_error: Matrix = target_vector.subtract(
@@ -101,10 +101,18 @@ export class NeuralNetwork {
   }
 
   train(input: Array<number>, target: Array<number>) {
+    // console.log("begin training");
+    // console.log("input: ", input);
+    // console.log("target: ", target);
     const activations: Array<Array<number>> = this.test(input);
-    const network_error = this.propError(activations, input, target);
+    // console.log("activations: ", activations);
+    const network_error = this.propagateError(activations, input, target);
     const deltaWeightsBiases = this.dWeightsBiases(network_error, activations);
     this.nudge(deltaWeightsBiases);
+    // console.log("network error", network_error);
+    // console.log("deltas error", deltaWeightsBiases);
+    // console.log("weights biases", this.layers);
+    // console.log("end training");
   }
 }
 
