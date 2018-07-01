@@ -101,9 +101,9 @@ export class NeuralNetwork {
   }
 
   train(input: Array<number>, target: Array<number>) {
-    const acitvations: Array<Array<number>> = this.test(input);
-    const network_error = this.propError(acitvations, input, target);
-    const deltaWeightsBiases = this.dWeightsBiases(network_error, acitvations);
+    const activations: Array<Array<number>> = this.test(input);
+    const network_error = this.propError(activations, input, target);
+    const deltaWeightsBiases = this.dWeightsBiases(network_error, activations);
     this.nudge(deltaWeightsBiases);
   }
 }

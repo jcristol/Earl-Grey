@@ -87,9 +87,9 @@ class NeuralNetwork {
         });
     }
     train(input, target) {
-        const acitvations = this.test(input);
-        const network_error = this.propError(acitvations, input, target);
-        const deltaWeightsBiases = this.dWeightsBiases(network_error, acitvations);
+        const activations = this.test(input);
+        const network_error = this.propError(activations, input, target);
+        const deltaWeightsBiases = this.dWeightsBiases(network_error, activations);
         this.nudge(deltaWeightsBiases);
     }
 }
