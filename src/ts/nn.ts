@@ -12,12 +12,13 @@ export class NeuralNetwork {
     const input_nodes: number = structure["input_nodes"];
     const hidden_nodes: number = structure["hidden_nodes"];
     const output_nodes: number = structure["output_nodes"];
-    this.layers = Array(hidden_layers + 1).fill(new Object());
-    this.layers = this.layers.map((layer, i, arr) => {
+    this.layers = Array(hidden_layers + 1).fill(null);
+    this.layers = this.layers.map((_, i, arr) => {
+      const layer: Object = {};
       if (i == 0) {
         layer["weights"] = Matrix.random(hidden_nodes, input_nodes, -1, 1);
         layer["biases"] = Matrix.random(hidden_nodes, 1, -1, 1);
-      } else if (i == (hidden_layers + 1)) {
+      } else if (i == hidden_layers) {
         layer["weights"] = Matrix.random(output_nodes, hidden_nodes, -1, 1);
         layer["biases"] = Matrix.random(output_nodes, 1, -1, 1);
       } else {
