@@ -17,7 +17,7 @@ export class NeuralNetwork {
       if (i == 0) {
         layer["weights"] = Matrix.random(hidden_nodes, input_nodes, -1, 1);
         layer["biases"] = Matrix.random(hidden_nodes, 1, -1, 1);
-      } else if (i == hidden_layers) {
+      } else if (i == (hidden_layers + 1)) {
         layer["weights"] = Matrix.random(output_nodes, hidden_nodes, -1, 1);
         layer["biases"] = Matrix.random(output_nodes, 1, -1, 1);
       } else {
