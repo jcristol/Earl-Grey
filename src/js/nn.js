@@ -42,7 +42,10 @@ class NeuralNetwork {
     // propagates error of activations backwards through the network from ouput nodes to input nodes
     propError(activations, input, target) {
         let previous_error = null;
-        return activations.map((activation, index) => {
+        return activations
+            .slice(1, activations.length)
+            .reverse()
+            .map((activation, index) => {
             const wb_index = this.hidden_layers - index;
             if (index == 0) {
                 // if last layer
@@ -63,11 +66,10 @@ class NeuralNetwork {
         });
     }
     dWeightsBiases(nn_error, activations) {
-        return nn_error
-            .slice(0, nn_error.length - 1)
-            .map((a_error, index) => {
-            const activation = matrix_1.Matrix.vector(activations[index]);
-            const pactivation = matrix_1.Matrix.vector(activations[index + 1]);
+        return nn_error.map((a_error, index) => {
+            const activation_index = this.hidden_layers - index + 1;
+            const activation = matrix_1.Matrix.vector(activations[activation_index]);
+            const pactivation = matrix_1.Matrix.vector(activations[activation_index - 1]);
             const dBias = a_error
                 .hadamard(derivative(activation))
                 .multiply(new matrix_1.Constant(this.alpha));
@@ -86,9 +88,8 @@ class NeuralNetwork {
     }
     train(input, target) {
         const acitvations = this.test(input);
-        const reversed_activations_minus_input = acitvations.reverse().slice(0, acitvations.length - 1);
-        const network_error = this.propError(rt, input, target);
-        const deltaWeightsBiases = this.dWeightsBiases(network_error, rt);
+        const network_error = this.propError(acitvations, input, target);
+        const deltaWeightsBiases = this.dWeightsBiases(network_error, acitvations);
         this.nudge(deltaWeightsBiases);
     }
 }
