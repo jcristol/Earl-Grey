@@ -187,3 +187,8 @@ describe("Test Utility functions", () => {
     expect(1).to.equal(a.m);
   });
 });
+
+// describe.only("tester", () => {
+//   const l = Matrix.random(3, 2, -1, 1);
+//   console.debug(l);
+// });
