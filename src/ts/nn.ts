@@ -101,18 +101,10 @@ export class NeuralNetwork {
   }
 
   train(input: Array<number>, target: Array<number>) {
-    // console.log("begin training");
-    // console.log("input: ", input);
-    // console.log("target: ", target);
     const activations: Array<Array<number>> = this.test(input);
-    // console.log("activations: ", activations);
     const network_error = this.propagateError(activations, input, target);
     const deltaWeightsBiases = this.dWeightsBiases(network_error, activations);
     this.nudge(deltaWeightsBiases);
-    // console.log("network error", network_error);
-    // console.log("deltas error", deltaWeightsBiases);
-    // console.log("weights biases", this.layers);
-    // console.log("end training");
   }
 }
 
