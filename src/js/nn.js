@@ -85,8 +85,8 @@ class NeuralNetwork {
         });
     }
     train(input, target) {
-        const t = this.test(input);
-        const rt = t.reverse();
+        const acitvations = this.test(input);
+        const reversed_activations_minus_input = acitvations.reverse().slice(0, acitvations.length - 1);
         const network_error = this.propError(rt, input, target);
         const deltaWeightsBiases = this.dWeightsBiases(network_error, rt);
         this.nudge(deltaWeightsBiases);

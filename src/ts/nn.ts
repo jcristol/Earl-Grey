@@ -97,8 +97,8 @@ export class NeuralNetwork {
   }
 
   train(input: Array<number>, target: Array<number>) {
-    const t: Array<Array<number>> = this.test(input);
-    const rt: Array<Array<number>> = t.reverse();
+    const acitvations: Array<Array<number>> = this.test(input);
+    const reversed_activations_minus_input: Array<Array<number>> = acitvations.reverse().slice(0, acitvations.length - 1);
     const network_error = this.propError(rt, input, target);
     const deltaWeightsBiases = this.dWeightsBiases(network_error, rt);
     this.nudge(deltaWeightsBiases);
