@@ -43,24 +43,23 @@ export class NeuralNetwork {
   }
 
   // propagates error of activations backwards through the network from ouput nodes to input nodes
-  private static propError(
-    nn: NeuralNetwork,
+  private propError(
     activations: Array<Array<number>>,
     input: Array<number>,
     target: Array<number>
   ): Array<Matrix> {
     let previous_error: Matrix = null;
     return activations.map((activation: Array<number>, index: number) => {
-      const wb_index: number = nn.hidden_layers - index - 1;
+      const wb_index: number = this.hidden_layers - index;
       if (index == 0) {
-        // if output layer
+        // if last layer
         const target_vector: Matrix = Matrix.vector(target);
         const activation_vector: Matrix = Matrix.vector(activation);
         const output_error: Matrix = target_vector.subtract(activation_vector);
         previous_error = output_error;
         return output_error;
       } else {
-        const weights: Matrix = nn.layers[wb_index]["weights"];
+        const weights: Matrix = this.layers[wb_index]["weights"];
         const propagated_error: Matrix = weights
           .transpose()
           .multiply(previous_error);
@@ -70,8 +69,7 @@ export class NeuralNetwork {
     });
   }
 
-  private static dWeightsBiases(
-    nn: NeuralNetwork,
+  private dWeightsBiases(
     nn_error: Array<Matrix>,
     activations: Array<Array<number>>
   ): Array<Array<Matrix>> {
@@ -82,32 +80,28 @@ export class NeuralNetwork {
         const pactivation = Matrix.vector(activations[index + 1]);
         const dBias = a_error
           .hadamard(derivative(activation))
-          .multiply(new Constant(nn.alpha));
+          .multiply(new Constant(this.alpha));
         const dWeight = dBias.multiply(pactivation.transpose());
         return [dWeight, dBias];
       });
   }
 
-  private static nudge(nn: NeuralNetwork, nudges: Array<Array<Matrix>>) {
+  private nudge(nudges: Array<Array<Matrix>>) {
     nudges.forEach(([dW, dB], index: number) => {
-      const wb_index: number = nn.hidden_layers - index - 1;
-      const weights: Matrix = nn.layers[wb_index]["weights"];
-      const biases: Matrix = nn.layers[wb_index]["biases"];
-      nn.layers[wb_index]["weights"] = weights.add(dW);
-      nn.layers[wb_index]["biases"] = biases.add(dB);
+      const wb_index: number = this.hidden_layers - index;
+      const weights: Matrix = this.layers[wb_index]["weights"];
+      const biases: Matrix = this.layers[wb_index]["biases"];
+      this.layers[wb_index]["weights"] = weights.add(dW);
+      this.layers[wb_index]["biases"] = biases.add(dB);
     });
   }
 
   train(input: Array<number>, target: Array<number>) {
     const t: Array<Array<number>> = this.test(input);
     const rt: Array<Array<number>> = t.reverse();
-    const network_error = NeuralNetwork.propError(this, rt, input, target);
-    const deltaWeightsBiases = NeuralNetwork.dWeightsBiases(
-      this,
-      network_error,
-      rt
-    );
-    NeuralNetwork.nudge(this, deltaWeightsBiases);
+    const network_error = this.propError(rt, input, target);
+    const deltaWeightsBiases = this.dWeightsBiases(network_error, rt);
+    this.nudge(deltaWeightsBiases);
   }
 }
 
