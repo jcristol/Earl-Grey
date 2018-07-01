@@ -34,7 +34,7 @@ export class NeuralNetwork {
     const activations: Array<Array<number>> = this.layers.map(layer => {
       const i: Matrix = Matrix.vector(input);
       const logits: Matrix = (<Matrix>layer["weights"]).multiply(i);
-      const logits_plus_bias: Matrix = (<Matrix>layer["biases"]).add(logits);
+      const logits_plus_bias: Matrix = logits.add(layer["biases"]);
       const activation: Matrix = logits_plus_bias.map(val => sigmoid(val));
       input = activation.flatten();
       return input;
