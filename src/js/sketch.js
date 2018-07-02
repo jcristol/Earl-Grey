@@ -4,7 +4,6 @@ import "p5";
 import "p5/lib/addons/p5.dom";
 
 let nn;
-let lr_slider;
 
 
 
@@ -31,31 +30,6 @@ function training_data(func, ...inputs) {
   return [input, target];
 }
 
-function genSampleXOR(s) {
-  return Array(s)
-    .fill(null)
-    .map(() => {
-      const a = Math.floor(Math.random() * 2);
-      const b = Math.floor(Math.random() * 2);
-      const r = xor(a, b);
-      const input = [a, b];
-      const target = [r];
-      return [input, target];
-    });
-}
-
-function genSampleAND(s) {
-  return Array(s)
-    .fill(null)
-    .map(() => {
-      const a = Math.floor(Math.random() * 2);
-      const b = Math.floor(Math.random() * 2);
-      const r = and(a, b);
-      const input = [a, b];
-      const target = [r];
-      return [input, target];
-    });
-}
 
 window.setup = function() {
   nn = new NeuralNetwork(3, 2, 2, 1, 0.05);
