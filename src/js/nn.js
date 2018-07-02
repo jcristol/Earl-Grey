@@ -31,6 +31,9 @@ class NeuralNetwork {
     predict(input) {
         return this.test(input).pop();
     }
+    setLearningRate(r) {
+        this.alpha = r;
+    }
     test(input) {
         const og = input;
         const activations = this.layers.map(layer => {

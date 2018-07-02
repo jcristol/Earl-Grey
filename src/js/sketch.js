@@ -1,8 +1,10 @@
 let brain;
 import { NeuralNetwork } from "./nn";
 import "p5";
+import "p5/lib/addons/p5.dom";
 
 let nn;
+let lr_slider;
 
 function xor(a, b) {
   if (a && b) {
@@ -48,8 +50,9 @@ function genSampleAND(s) {
 }
 
 window.setup = function() {
-  nn = new NeuralNetwork(4, 2, 4, 1, 0.05);
+  nn = new NeuralNetwork(1, 2, 2, 1, 0.05);
   createCanvas(400, 400);
+  lr_slider = createSlider(0, 0.5, 0.1, 0.01);
 };
 
 window.draw = function() {
@@ -62,7 +65,9 @@ window.draw = function() {
     const target = [r];
     nn.train(input, target);
   }
-  let res = 5;
+
+  nn.setLearningRate(lr_slider.value());
+  let res = 10;
   let rows = height / res;
   let cols = width / res;
   for (let i = 0; i < cols; i++) {

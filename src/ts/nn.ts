@@ -34,6 +34,10 @@ export class NeuralNetwork {
     return this.test(input).pop();
   }
 
+  setLearningRate(r: number) {
+    this.alpha = r;
+  }
+
   test(input: Array<number>): Array<Array<number>> {
     const og: Array<number> = input;
     const activations: Array<Array<number>> = this.layers.map(layer => {
