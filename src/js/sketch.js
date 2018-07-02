@@ -50,7 +50,7 @@ function genSampleAND(s) {
 }
 
 window.setup = function() {
-  nn = new NeuralNetwork(1, 2, 2, 1, 0.05);
+  nn = new NeuralNetwork(3, 2, 2, 1, 0.05);
   createCanvas(400, 400);
   lr_slider = createSlider(0, 0.5, 0.1, 0.01);
 };
@@ -60,14 +60,14 @@ window.draw = function() {
   for (let i = 0; i < 250; i++) {
     const a = Math.floor(Math.random() * 2);
     const b = Math.floor(Math.random() * 2);
-    const r = xor(a, b);
+    const r = and(a, b);
     const input = [a, b];
     const target = [r];
     nn.train(input, target);
   }
 
   nn.setLearningRate(lr_slider.value());
-  let res = 10;
+  let res = 5;
   let rows = height / res;
   let cols = width / res;
   for (let i = 0; i < cols; i++) {
