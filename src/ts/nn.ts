@@ -5,13 +5,14 @@ export class NeuralNetwork {
   hidden_layers: number;
   alpha: number;
 
-  constructor(structure: Object) {
-    this.hidden_layers = structure["hidden_layers"];
-    this.alpha = structure["alpha"];
-    const hidden_layers: number = structure["hidden_layers"];
-    const input_nodes: number = structure["input_nodes"];
-    const hidden_nodes: number = structure["hidden_nodes"];
-    const output_nodes: number = structure["output_nodes"];
+  constructor(...args) {
+    const [lvls, is, hs, os, alpha] = args;
+    this.hidden_layers = lvls;
+    this.alpha = alpha;
+    const hidden_layers: number = lvls;
+    const input_nodes: number = is;
+    const hidden_nodes: number = hs;
+    const output_nodes: number = os;
     this.layers = Array(hidden_layers + 1).fill(null);
     this.layers = this.layers.map((_, i, arr) => {
       const layer: Object = {};
