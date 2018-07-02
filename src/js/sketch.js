@@ -6,6 +6,8 @@ import "p5/lib/addons/p5.dom";
 let nn;
 let lr_slider;
 
+
+
 function xor(a, b) {
   if (a && b) {
     return 0;
@@ -21,6 +23,12 @@ function and(a, b) {
     return 1;
   }
   return 0;
+}
+
+function training_data(func, ...inputs) {
+  const input = [...inputs];
+  const target = [func(...inputs)];
+  return [input, target];
 }
 
 function genSampleXOR(s) {
@@ -52,22 +60,16 @@ function genSampleAND(s) {
 window.setup = function() {
   nn = new NeuralNetwork(3, 2, 2, 1, 0.05);
   createCanvas(400, 400);
-  lr_slider = createSlider(0, 0.5, 0.1, 0.01);
 };
 
 window.draw = function() {
   background(0);
   for (let i = 0; i < 250; i++) {
-    const a = Math.floor(Math.random() * 2);
-    const b = Math.floor(Math.random() * 2);
-    const r = and(a, b);
-    const input = [a, b];
-    const target = [r];
-    nn.train(input, target);
+    const r = training_data(xor, Math.floor(Math.random() * 2), Math.floor(Math.random() * 2));
+    nn.train(...r);
   }
 
-  nn.setLearningRate(lr_slider.value());
-  let res = 5;
+  let res = 10;
   let rows = height / res;
   let cols = width / res;
   for (let i = 0; i < cols; i++) {
