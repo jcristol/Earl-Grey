@@ -30,6 +30,10 @@ export class NeuralNetwork {
     });
   }
 
+  predict(input: Array<number>): Array<number> {
+    return this.test(input).pop();
+  }
+
   test(input: Array<number>): Array<Array<number>> {
     const og: Array<number> = input;
     const activations: Array<Array<number>> = this.layers.map(layer => {
@@ -56,7 +60,7 @@ export class NeuralNetwork {
       .map((activation: Array<number>, index: number) => {
         const wb_index: number = this.hidden_layers - index + 1;
         if (previous_error == null) {
-          // if output 
+          // if output
           const target_vector: Matrix = Matrix.vector(target);
           const activation_vector: Matrix = Matrix.vector(activation);
           const output_error: Matrix = target_vector.subtract(

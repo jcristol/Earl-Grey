@@ -51,20 +51,20 @@ function genSampleAND(s){
 
 window.setup = function() {
   let samples = genSampleXOR(50000);
-  let nn = new NeuralNetwork(structure);
+  let nn = new NeuralNetwork(4, 2, 4, 1, 0.05);
   console.log("before training")
-  console.log("input: 1,0 ouput: ",nn.test([1,0]).pop());
-  console.log("input: 0,1 ouput: ",nn.test([0,1]).pop());
-  console.log("input: 1,1 ouput: ",nn.test([1,1]).pop());
-  console.log("input: 0,0 ouput: ",nn.test([0,0]).pop());
+  console.log("input: 1,0 ouput: ",nn.predict([1,0]));
+  console.log("input: 0,1 ouput: ",nn.predict([0,1]));
+  console.log("input: 1,1 ouput: ",nn.predict([1,1]));
+  console.log("input: 0,0 ouput: ",nn.predict([0,0]));
   samples.forEach(([input, target]) => {
     nn.train(input, target);
   });
   let input = [1, 0];
   let target = [1];
   console.log("after training")
-  console.log("input: 1,0 ouput: ",nn.test([1,0]).pop());
-  console.log("input: 0,1 ouput: ",nn.test([0,1]).pop());
-  console.log("input: 1,1 ouput: ",nn.test([1,1]).pop());
-  console.log("input: 0,0 ouput: ",nn.test([0,0]).pop());
+  console.log("input: 1,0 ouput: ",nn.predict([1,0]));
+  console.log("input: 0,1 ouput: ",nn.predict([0,1]));
+  console.log("input: 1,1 ouput: ",nn.predict([1,1]));
+  console.log("input: 0,0 ouput: ",nn.predict([0,0]));
 };

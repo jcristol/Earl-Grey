@@ -2,13 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const matrix_1 = require("./matrix");
 class NeuralNetwork {
-    constructor(structure) {
-        this.hidden_layers = structure["hidden_layers"];
-        this.alpha = structure["alpha"];
-        const hidden_layers = structure["hidden_layers"];
-        const input_nodes = structure["input_nodes"];
-        const hidden_nodes = structure["hidden_nodes"];
-        const output_nodes = structure["output_nodes"];
+    constructor(...args) {
+        const [lvls, is, hs, os, alpha] = args;
+        this.hidden_layers = lvls;
+        this.alpha = alpha;
+        const hidden_layers = lvls;
+        const input_nodes = is;
+        const hidden_nodes = hs;
+        const output_nodes = os;
         this.layers = Array(hidden_layers + 1).fill(null);
         this.layers = this.layers.map((_, i, arr) => {
             const layer = {};
@@ -26,6 +27,9 @@ class NeuralNetwork {
             }
             return layer;
         });
+    }
+    predict(input) {
+        return this.test(input).pop();
     }
     test(input) {
         const og = input;
@@ -48,7 +52,7 @@ class NeuralNetwork {
             .map((activation, index) => {
             const wb_index = this.hidden_layers - index + 1;
             if (previous_error == null) {
-                // if output 
+                // if output
                 const target_vector = matrix_1.Matrix.vector(target);
                 const activation_vector = matrix_1.Matrix.vector(activation);
                 const output_error = target_vector.subtract(activation_vector);
