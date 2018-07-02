@@ -13,12 +13,18 @@
   "license": "ISC",
   "dependencies": {
     "npm": "^6.1.0",
-    "p5": "^0.6.1"
+    "p5": "^0.6.1",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/mathjs": "^4.4.0",
     "@types/mocha": "^5.2.3",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.19",
     "deep-equal": "^1.0.1",
