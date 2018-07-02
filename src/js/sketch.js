@@ -2,7 +2,6 @@ let brain;
 import { NeuralNetwork } from "./nn";
 import "p5";
 import "p5/lib/addons/p5.dom";
-import "./index";
 
 let nn;
 let lr_slider;
